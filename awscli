@@ -1,14 +1,15 @@
 #!/bin/bash
 
-if [ "$#" -ne 2 ]; then
-    echo "Please provide username and MFA Token. Example: aws-cli.sh jdoe 123456"
+if [ "$#" -ne 3 ]; then
+    echo "Please provide username, AWS Organizaion ID and MFA Token. Example: aws-cli.sh jdoe 738007773326 123456"
     exit 1
 fi
 
 USER=$1
-TOKEN=$2
+TOKEN=$3
+ORG_ID=$2
 
-SESSION=$(aws --profile=default sts get-session-token --serial-number arn:aws:iam::738007690526:mfa/$USER --token-code $TOKEN)
+SESSION=$(aws --profile=default sts get-session-token --serial-number arn:aws:iam::$ORG_ID:mfa/$USER --token-code $TOKEN)
 if [ $? -ne 0 ]; then
     exit 1
 fi
